@@ -11,6 +11,13 @@
 
 ---
 
+![Screenshot 1](1.jpg)
+![Screenshot 2](2.jpg)
+![Screenshot 3](3.jpg)
+![Screenshot 4](4.jpg)
+
+---
+
 > **ID0 (Identity Zero)** is a **complete MAC address and hostname rotation system** for Linux — built for privacy, security testing, and anonymous networking.  
 > It automatically rotates network interface identities, updates `/etc/hosts`, cleans logs, and ensures full **NetworkManager compatibility**.
 
