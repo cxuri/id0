@@ -137,7 +137,6 @@ GNU General Public License v3.0 - See [LICENSE](LICENSE) for details.
 
 - **Source**: [github.com/cxuri/id0](https://github.com/cxuri/id0)
 - **Issues**: [GitHub Issues](https://github.com/cxuri/id0/issues)
-- **Documentation**: [docs/](docs/)
 
 ---
 
