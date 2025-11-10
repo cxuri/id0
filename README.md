@@ -79,7 +79,7 @@ sudo ./id0.sh revert wlan0       # Restore original identity
 
 ---
 
-## Interface
+## Interface & Screenshots
 
 <p align="center">
   <img src="1.jpg" alt="Network device view" width="280" style="margin: 5px;">
