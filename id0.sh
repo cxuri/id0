@@ -43,8 +43,10 @@ MIN_MINUTES=3
 TIME_IS_RANDOM=false
 BACKUP_DIR="$HOME/.id0_backup"
 NM_CONFIG_FILE="/etc/NetworkManager/conf.d/99-id0-compat.conf"
-LOG_FILE="/tmp/id0.log"
+# --- FIX 1: New Log Path under /var/log/ ---
+LOG_FILE="/var/log/id0/id0.log"
 
+# --- FIX 2: Simplified Logging Functions (revert from tee) ---
 # Logging functions with timestamps
 log() { 
     local timestamp=$(date '+%H:%M:%S')
@@ -74,7 +76,10 @@ debug() {
 
 # Initialize logging
 init_logging() {
-    > "$LOG_FILE"
+    # --- FIX 3: Explicitly create directory and clear log file as root ---
+    sudo mkdir -p "$(dirname "$LOG_FILE")" 2>/dev/null
+    sudo touch "$LOG_FILE" 2>/dev/null
+    sudo truncate -s 0 "$LOG_FILE" 2>/dev/null
     log "ID0 started - PID: $$"
 }
 
@@ -210,7 +215,8 @@ change_mac_address() {
                 
                 # Verify the change was successful
                 local new_mac=$(get_current_mac $iface)
-                local original_mac=$(cat "$BACKUP_DIR/mac" 2>/dev/null)
+                # Use sudo cat to safely read the root-owned backup file
+                local original_mac=$(sudo cat "$BACKUP_DIR/mac" 2>/dev/null)
                 
                 if [[ -n "$new_mac" && "$new_mac" != "$original_mac" ]]; then
                     debug "MAC address successfully changed to: $new_mac"
@@ -240,35 +246,38 @@ get_current_mac() {
 
 # Save the original MAC and hostname
 backup_identity() {
-    mkdir -p "$BACKUP_DIR"
+    # Ensure backup directory is created as root if necessary
+    sudo mkdir -p "$BACKUP_DIR"
     
     # Backup MAC address
     local original_mac=$(get_current_mac $INTERFACE)
     if [[ -n "$original_mac" ]]; then
-        echo "$original_mac" > "$BACKUP_DIR/mac"
+        # Use tee to write to the backup file with root privileges
+        echo "$original_mac" | sudo tee "$BACKUP_DIR/mac" >/dev/null
     else
         error "Could not determine original MAC address"
         return 1
     fi
     
     # Backup hostname and hosts
-    hostname > "$BACKUP_DIR/hostname" 2>/dev/null
-    cp /etc/hosts "$BACKUP_DIR/hosts" 2>/dev/null
+    hostname | sudo tee "$BACKUP_DIR/hostname" >/dev/null 2>/dev/null
+    sudo cp /etc/hosts "$BACKUP_DIR/hosts" 2>/dev/null
     
     # Backup interface type
     if is_wireless $INTERFACE; then
-        echo "wireless" > "$BACKUP_DIR/iface_type"
+        echo "wireless" | sudo tee "$BACKUP_DIR/iface_type" >/dev/null
     else
-        echo "wired" > "$BACKUP_DIR/iface_type"
+        echo "wired" | sudo tee "$BACKUP_DIR/iface_type" >/dev/null
     fi
     
     # Backup current NetworkManager connections
     if command -v nmcli &>/dev/null; then
-        nmcli -t -f NAME,UUID connection show > "$BACKUP_DIR/nm_connections" 2>/dev/null
+        nmcli -t -f NAME,UUID connection show | sudo tee "$BACKUP_DIR/nm_connections" >/dev/null 2>/dev/null
     fi
     
     log "Original identity backed up to $BACKUP_DIR/"
     debug "Original MAC: $original_mac, Hostname: $(hostname)"
+    return 0 # Ensure success return after fixing backup writes
 }
 
 # Put everything back to normal
@@ -277,7 +286,7 @@ revert_identity() {
     
     # Revert MAC address
     if [[ -f "$BACKUP_DIR/mac" ]]; then
-        local original_mac=$(cat "$BACKUP_DIR/mac")
+        local original_mac=$(sudo cat "$BACKUP_DIR/mac")
         sudo ip link set $INTERFACE down 2>/dev/null
         if sudo macchanger -m "$original_mac" $INTERFACE > /dev/null 2>&1; then
             sudo ip link set $INTERFACE up 2>/dev/null
@@ -300,7 +309,7 @@ revert_identity() {
     
     # Revert hostname
     if [[ -f "$BACKUP_DIR/hostname" ]]; then
-        local original_hostname=$(cat "$BACKUP_DIR/hostname")
+        local original_hostname=$(sudo cat "$BACKUP_DIR/hostname")
         sudo hostnamectl set-hostname "$original_hostname" 2>/dev/null
         
         # Restore original hosts file
@@ -513,6 +522,7 @@ rotate_identity() {
     
     # Change hostname
     local new_hostname=$(random_hostname)
+    # The hostname change and hosts file update happen before other 'sudo' calls
     if sudo hostnamectl set-hostname "$new_hostname" 2>/dev/null; then
         update_hosts_file "$new_hostname"
         debug "Hostname rotation successful: $new_hostname"
@@ -718,8 +728,9 @@ main() {
             ;;
             
         logs)
+            # Use sudo to ensure we can read the root-owned log file
             if [[ -f "$LOG_FILE" ]]; then
-                tail -20 "$LOG_FILE"
+                sudo tail -20 "$LOG_FILE"
             else
                 info "No log file found"
             fi
