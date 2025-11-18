@@ -1,0 +1,34 @@
+# Created By @cxuri 
+# Version 1.0
+
+[Unit]
+Description=ID0 - Identity Zero Rotation Service
+Documentation=https://github.com/cxuri/id0
+
+# Ensure network is ready before starting
+After=network.target NetworkManager.service
+Wants=network.target
+
+[Service]
+Type=simple
+User=root
+
+# Load config file
+EnvironmentFile=/etc/id0.conf
+
+# Start command
+ExecStart=/usr/local/bin/id0 start ${INTERFACE} ${INTERVAL}
+
+# Stop command: ensures identity is reverted when service stops
+ExecStop=/usr/local/bin/id0 revert ${INTERFACE}
+
+# Restart automatically if it crashes
+Restart=on-failure
+RestartSec=5s
+
+# Standard Output logging
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

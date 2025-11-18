@@ -37,26 +37,24 @@ chmod +x id0.sh
 
 ---
 
-## Quick Start
+## Installation
 
 ```bash
-# Create identity backup
-./id0.sh backup
-
-# Configure NetworkManager
-sudo ./id0.sh fix-networkmanager
-
-# Start rotation on wlan0 (5-minute intervals)
-sudo ./id0.sh start wlan0 5
-
-# Monitor status
-./id0.sh status
-
-# Restore original identity
-sudo ./id0.sh revert wlan0
+git clone https://github.com/cxuri/id0.git
+cd id0
+chmod +x install.sh
+sudo ./install.sh
 ```
 
+## Quick Start ( Without Installation)
+
+```bash
+git clone https://github.com/cxuri/id0.git
+cd id0/bin
+chmod +x id0.sh
+sudo id0.sh
 ---
+
 
 ## Command Reference
 

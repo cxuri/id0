@@ -1,0 +1,14 @@
+# ID0 Git Ignore
+
+# Backup directory
+.id0_backup/
+
+# Logs
+*.log
+
+# Editor temp files
+*.swp
+*~
+
+# System files
+.DS_Store
