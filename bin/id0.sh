@@ -17,7 +17,7 @@ display_banner() {
 │         ID0 : Stay Hidden           │
 │                                     │
 │         developed by @cxuri         │
-│           version 1.0               │
+│           version 1.1               │
 │                                     │
 │          use -h for usage           │
 │                                     │
@@ -748,7 +748,7 @@ main() {
             ;;
             
         help|-h|--help)
-            echo -e "${CYAN}ID0 - Identity Zero v1.0${NC}"
+            echo -e "${CYAN}ID0 - Identity Zero v1.1${NC}"
             echo "Complete MAC address and hostname rotation system"
             echo ""
             echo -e "${GREEN}Usage:${NC} $0 [command] [interface] [minutes]"
