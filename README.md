@@ -24,17 +24,6 @@ ID0 is a network identity management system for Linux that automates MAC address
 - **NetworkManager Compatibility** – Seamless integration with modern network management
 - **Log Management** – System log cleaning and activity tracking
 - **Scheduled Rotation** – Configurable timing intervals
-
----
-
-## Installation
-
-```bash
-git clone https://github.com/cxuri/id0.git
-cd id0
-chmod +x id0.sh
-```
-
 ---
 
 ## Installation
@@ -46,6 +35,7 @@ chmod +x install.sh
 sudo ./install.sh
 ```
 
+
 ## Quick Start ( Without Installation)
 
 ```bash
@@ -53,6 +43,7 @@ git clone https://github.com/cxuri/id0.git
 cd id0/bin
 chmod +x id0.sh
 sudo id0.sh
+```
 ---
 
 
@@ -80,11 +71,11 @@ sudo ./id0.sh revert wlan0       # Restore original identity
 ## Interface & Screenshots
 
 <p align="center">
-  <img src="1.jpg" alt="Network device view" width="280" style="margin: 5px;">
-  <img src="2.jpg" alt="Interface configuration" width="280" style="margin: 5px;">
+  <img src="images/1.jpg" alt="Network device view" width="280" style="margin: 5px;">
+  <img src="images/2.jpg" alt="Interface configuration" width="280" style="margin: 5px;">
   <br>
-  <img src="3.jpg" alt="Tool interface" width="280" style="margin: 5px;">
-  <img src="4.jpg" alt="Activity logs" width="280" style="margin: 5px;">
+  <img src="images/3.jpg" alt="Tool interface" width="280" style="margin: 5px;">
+  <img src="images/4.jpg" alt="Activity logs" width="280" style="margin: 5px;">
 </p>
 
 ---
