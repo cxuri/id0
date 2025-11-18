@@ -4,7 +4,7 @@
   <a href="https://www.gnu.org/licenses/gpl-3.0">
     <img src="https://img.shields.io/badge/License-GPLv3-blue.svg" alt="License: GPL v3">
   </a>
-  <img src="https://img.shields.io/badge/Version-1.0-green.svg" alt="Version 1.0">
+  <img src="https://img.shields.io/badge/Version-1.0-green.svg" alt="Version 1.1">
   <img src="https://img.shields.io/badge/Platform-Linux-lightgrey.svg" alt="Linux Platform">
   <a href="https://github.com/cxuri/id0/pulls">
     <img src="https://img.shields.io/badge/PRs-Welcome-brightgreen.svg" alt="PRs Welcome">
